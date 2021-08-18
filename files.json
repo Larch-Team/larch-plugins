@@ -25,6 +25,9 @@
             "actual_tree": [
                 "plugins/Output/actual_tree.py"
             ],
+            "debug": [
+                "plugins/Output/debug.py"
+            ],
             "TeX_infer": [
                 "plugins/Output/TeX_infer.py"
             ]
