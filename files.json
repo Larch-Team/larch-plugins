@@ -38,5 +38,7 @@
             ]
         }
     },
-    "setups": {}
+    "setups": {
+        "default": "app/appdata/setups/default.json"
+    }
 }
