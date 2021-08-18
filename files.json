@@ -7,22 +7,19 @@
             "pan": [
                 "app/appdata/plugins/Assistant/pan/__init__.py",
                 "app/appdata/plugins/Assistant/pan/articles/main.html"
-            ],
-            "__pycache__": []
+            ]
         },
         "Formal": {
             "analytic_freedom": [
                 "app/appdata/plugins/Formal/analytic_freedom/solver.py",
                 "app/appdata/plugins/Formal/analytic_freedom/syntax_check.py",
                 "app/appdata/plugins/Formal/analytic_freedom/__init__.py"
-            ],
-            "__pycache__": []
+            ]
         },
         "Lexicon": {
             "classic": [
                 "plugins/Lexicon/classic.py"
-            ],
-            "__pycache__": []
+            ]
         },
         "Output": {
             "actual_tree": [
@@ -30,14 +27,12 @@
             ],
             "TeX_infer": [
                 "plugins/Output/TeX_infer.py"
-            ],
-            "__pycache__": []
+            ]
         },
         "UserInterface": {
             "CLI": [
                 "plugins/UserInterface/CLI.py"
-            ],
-            "__pycache__": []
+            ]
         }
     },
     "setups": {}
