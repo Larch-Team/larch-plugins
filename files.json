@@ -39,6 +39,6 @@
         }
     },
     "setups": {
-        "default": "app/appdata/setups/default.json"
+        "default": "setups/default.json"
     }
 }
