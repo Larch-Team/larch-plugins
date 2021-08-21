@@ -1,0 +1,44 @@
+{
+    "plugins": {
+        "Assistant": {
+            "basic": [
+                "plugins/Assistant/basic.py"
+            ],
+            "pan": [
+                "plugins/Assistant/pan/__init__.py",
+                "plugins/Assistant/pan/articles/main.html"
+            ]
+        },
+        "Formal": {
+            "analytic_freedom": [
+                "plugins/Formal/analytic_freedom/solver.py",
+                "plugins/Formal/analytic_freedom/syntax_check.py",
+                "plugins/Formal/analytic_freedom/__init__.py"
+            ]
+        },
+        "Lexicon": {
+            "classic": [
+                "plugins/Lexicon/classic.py"
+            ]
+        },
+        "Output": {
+            "actual_tree": [
+                "plugins/Output/actual_tree.py"
+            ],
+            "debug": [
+                "plugins/Output/debug.py"
+            ],
+            "TeX_infer": [
+                "plugins/Output/TeX_infer.py"
+            ]
+        },
+        "UserInterface": {
+            "CLI": [
+                "plugins/UserInterface/CLI.py"
+            ]
+        }
+    },
+    "setups": {
+        "default": "setups/default.json"
+    }
+}
