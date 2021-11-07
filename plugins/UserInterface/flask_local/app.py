@@ -11,7 +11,7 @@ app = Flask('flask_local', static_url_path='/static')
 session = Session('main', 'config.json')
 
 @app.route('/favicon.ico', methods=['GET'])
-def colors():
+def favicon():
     return redirect('/static/favicon.ico')
 
 
