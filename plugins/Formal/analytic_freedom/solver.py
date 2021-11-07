@@ -39,7 +39,7 @@ def append_by_rules(containers: dict[str, list[utils.SignedSentence]], nodes: It
     :rtype: dict[str, list[utils.SignedSentence]]
     """
     for node in nodes:
-        num = len(node.path)
+        num = node.depth
 
         if not node.closed and (rule := find_rule(node.sentence)) is not None:
             containers[rule].append(

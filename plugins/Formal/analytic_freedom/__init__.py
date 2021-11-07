@@ -14,7 +14,7 @@ from sentence import Sentence
 from usedrule import UsedRule
 
 SOCKET = 'Formal'
-VERSION = '0.3.0'
+VERSION = '0.4.0'
 
 PRECEDENCE = {
     'and': 3,
@@ -36,6 +36,15 @@ def prepare_for_proving(statement: Sentence) -> Sentence:
 
 def get_tags() -> tuple[str]:
     return 'propositional', 'uses negation'
+
+
+def generate_formula(sess: utils.Session_, length: int, vars: int) -> Sentence:
+    f = utils.generate_wff(sess, length, {
+        2 : ['and', 'or', 'imp'],
+        1 : ['not']
+    }, vars, 'sentvar')
+    assert (p := check_syntax(f)) is None, f"Formuła jest niepoprawna: {p}"
+    return f
 
 
 # SYNTAX CHECKING
@@ -139,7 +148,12 @@ def strict_doublenot(sentence: Sentence):
 
 @double_not.setNaive
 def naive_doublenot(branch: list[Sentence], sentenceID: SentenceID):
-    return utils.reduce_prefix(utils.reduce_prefix(utils.empty_creator(branch[sentenceID]), 'not'), 'not')
+    f = branch[sentenceID]
+    res = utils.reduce_prefix(utils.reduce_prefix(utils.empty_creator(f), 'not'), 'not')
+    if res is None:
+        raise RaisedUserMistake('cannot perform', "This rule cannot be performed")
+    return res
+
 
 
 # CHECKER
