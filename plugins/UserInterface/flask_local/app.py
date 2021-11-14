@@ -37,7 +37,12 @@ def larch():
 
 @app.route('/hidden/console', methods=['GET'])
 def switch_to_console():
-    return session.plug_switch('UserInterface', 'CLI')
+    try:
+        session.plug_switch('UserInterface', 'CLI')
+    except Exception as e:
+        return f"Nie udało się: {e}"
+    else:
+        return "Udało się"
 
 
 # API
@@ -216,10 +221,10 @@ def do_undo() -> str:
 def do_no_contra() -> str:
     branch_name = request.json['branch']
     try:
-        _, closed = session.proof.nodes.getleaf(
-            branch_name).getbranch_sentences()
-        if closed:
-            return JSONResponse(type_='error', content="Ta gałąź została już wcześniej zamknięta. Spróbuj inną.")
+        # _, closed = session.proof.nodes.getleaf(
+        #     branch_name).getbranch_sentences()
+        # if closed:
+        #     return JSONResponse(type_='error', content="Ta gałąź została już wcześniej zamknięta. Spróbuj inną.")
         session.proof.nodes.getleaf(branch_name).close(Emptiness)
         return JSONResponse(type_='success')
     except EngineError as e:
@@ -239,9 +244,9 @@ def do_contra() -> str:
     try:
         branch, closed = session.proof.nodes.getleaf(
             branch_name).getbranch_sentences()
-        if closed:
-            return JSONResponse(type_='error', content="Ta gałąź została już wcześniej zamknięta. Spróbuj inną.")
-        elif session.sockets['Formal'].plugin_name == 'analytic_freedom':
+        # if closed:
+        #     return JSONResponse(type_='error', content="Ta gałąź została już wcześniej zamknięta. Spróbuj inną.")
+        if session.sockets['Formal'].plugin_name == 'analytic_freedom':
             if (
                 branch[sID1].getNonNegated() != branch[sID2].getNonNegated()
                 or (
@@ -252,22 +257,15 @@ def do_contra() -> str:
                 != 1
             ):
                 return JSONResponse(type_='error', content="Podane formuły nie są ze sobą sprzeczne. Poszukaj innych, bądź uznaj gałąź za niesprzeczną.")
-            session.proof.nodes.getleaf(branch_name).close(
-                Contradiction(sentenceID1=sID1+1, sentenceID2=sID2+1))
-            return JSONResponse(type_='success')
         elif session.sockets['Formal'].plugin_name == 'analytic_signed':
             if branch[sID1][1:] != branch[sID2][1:] or {
                 branch[sID1].getTypes()[0],
                 branch[sID2].getTypes()[0],
             } != {'signtrue', 'signfalse'}:
                 return JSONResponse(type_='error', content="Podane formuły nie są ze sobą sprzeczne. Poszukaj innych, bądź uznaj gałąź za niesprzeczną.")
-            session.proof.nodes.getleaf(branch_name).close(
-                Contradiction(sentenceID1=sID1+1, sentenceID2=sID2+1))
-            return JSONResponse(type_='success')
-        else:
-            session.proof.nodes.getleaf(branch_name).close(
-                Contradiction(sentenceID1=sID1+1, sentenceID2=sID2+1))
-            return JSONResponse(type_='success')
+        session.proof.nodes.getleaf(branch_name).close(
+            Contradiction(sentenceID1=sID1+1, sentenceID2=sID2+1))
+        return JSONResponse(type_='success')
     except EngineError as e:
         return JSONResponse(type_='error', content=str(e))
 
@@ -336,7 +334,12 @@ def do_print() -> str:
     try:
         session.plug_switch('Output', request.args.get(
             'plugin', default='TeX_forest', type=str))
-        t = "\n".join(session.gettree())
+        t = [
+                '\\section{Dowód formuły $%s$}'
+                % session.proof.sentence.getReadable(),
+                '\\subsection{Drzewo dowodu}',
+                *session.gettree()
+            ]
     finally:
         session.plug_switch('Output', old_plug)
-    return t
+    return "\n".join(t)
